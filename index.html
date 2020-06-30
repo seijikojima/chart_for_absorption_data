@@ -1,157 +1,142 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-              <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-              <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-             
- 
-              <div id="app">
-                  <button v-on:click="post_data">post data</button>
-                 
-                  <div v-for="item in items">
-                      <table>
-                          <tr>
-                              <td>{{item.date}}</td>
-                              <td>{{item.temperature}}</td>
-                    <td>{{item.humidity}}</td>
-                    <td>{{item.weight}}</td>
-                          </tr>
-                      </table>
-                  </div>
-             
- 
-                  <div class="chart_frame">
-                      <canvas id="myLineChart"></canvas>
-                  </div>
-              </div>
-             
- 
-              <script>
-             
- 
-              var app = new Vue({
-                el: '#app',
-                data: {
-                  items: [],
-                  ds : [],
-                  ts : [],
-                  hs : [],
-        ws : [],
-                },
-                methods: {
-                  post_data : function(){
-                    var data = {
-                        "date" : new Date(),
-                        "temperature" : 25.0,
-                        "humidity" : 50.8
-                        }
-                    axios.post('http://139.162.125.21:7001/post_data', data ).then( res => {
-                        console.log(data);
-                    });
-             
- 
-                  },
-             
- 
-                  render_chart : function(){
-                    var ctx = document.getElementById("myLineChart");
-                    var myLineChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                     labels: app.ds,
-                      datasets: [
-                        {
-                          label: '気温',
-                          data : app.ts,
-                          borderColor: "rgba(255,0,0,1)",
-                          backgroundColor: "rgba(0,0,0,0)"
-                        },
-                        {
-                          label: '湿度',
-                          data: app.hs,
-                          borderColor: "rgba(0,0,255,1)",
-                          backgroundColor: "rgba(0,0,0,0)"
-                        },
-              {
-                          label: '重さ',
-                          data: app.ws,
-                          borderColor: "rgba(0,255,0,1)",
-                          backgroundColor: "rgba(0,0,0,0)"
-                        },
-                      ],
-                    },
-                    options: {
-                      title: {
-                        display: true,
-                        text: 'absorption data'
-                      },
-                      scales: {
-                        yAxes: [{
-                          ticks: {
-                            suggestedMax: 40,
-                            suggestedMin: 0,
-                            stepSize: 10,
-                            callback: function(value, index, values){
-                              return  value +  '度'
-                            }
-                          }
-                        }]
-                      },
-                    }
-                  });
-                  }
-             
- 
-             
- 
-                },
-                // ブラウザ起動時に実行
-                mounted(){
-                  axios.get('http://139.162.125.21:7001/data', {}).then( res => {
-                      app.items = res.data;
-                      app.items.forEach(e =>{
-                          app.ds.push(e.date);
-                          app.ts.push(e.temperature);
-                          app.hs.push(e.humidity);
-                app.ws.push(e.weight);
-                      })
-                      app.render_chart();
-                  });
-             
- 
-                }
-              })
-             
- 
-              </script>
-             
- 
-             
- 
-              <!-- css -->
-              <style>
-             
- 
-              table{
-                border-collapse: collapse;
-                border-spacing: 0;
-                width: 100%;
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+<div id="app">
+    <button v-on:click="post_data">post fake data</button>
+
+    <div class="chart_frame">
+      <canvas id="myLineChart"></canvas>
+  </div>
+    
+    <div v-for="item in items">
+        <table>
+            <tr>
+                <td>{{item.date}}</td>
+                <td>{{item.temperature}}</td>
+                <td>{{item.humidity}}</td>
+            </tr>
+        </table>
+    </div>
+
+</div> 
+
+<script>
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    items: [],
+    ds : [],
+    ts : [],
+    hs : [],
+    ws : [],
+  },
+  methods: {
+
+    post_data : function(){
+      var data = { 
+          "date" : new Date(),
+          "temperature" : 25.0,
+          "humidity" : 50.8
+          }
+      axios.post('http://139.162.125.21:7001/post_data', data ).then( res => {
+          console.log(data);
+      });
+
+    },
+
+    render_chart : function(){
+      var ctx = document.getElementById("myLineChart");
+      var myLineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: app.ds,
+        datasets: [
+          {
+            label: '気温',
+            data : app.ts,
+            borderColor: "rgba(255,0,0,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          },
+          {
+            label: '湿度',
+            data: app.hs,
+            borderColor: "rgba(0,0,255,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          },
+          {
+            label: '重さ',
+            data: app.ws,
+            borderColor: "rgba(0,255,0,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          }
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'absorption data'
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              suggestedMax: 40,
+              suggestedMin: 0,
+              stepSize: 10,
+              callback: function(value, index, values){
+                return  value +  '度'
               }
-             
- 
-              table tr{
-                border-bottom: solid 1px #eee;
-                cursor: pointer;
-              }
-             
- 
-              .chart_frame{
-                /* height:500px; */
-                /* width:600px;  */
-                width : 80%;
-                margin:50px auto;
-                border : solid 1px #aaa;
-              }
-             
- 
-             
- 
-              </style>
+            }
+          }]
+        },
+      }
+    });
+    }
+
+
+  },
+  // ブラウザ起動時に実行
+  mounted(){
+    axios.get('http://139.162.125.21:7001/data', {}).then( res => {
+        app.items = res.data;
+        app.items.forEach(e =>{
+            app.ds.push(e.date);
+            app.ts.push(e.temperature);
+            app.hs.push(e.humidity);
+            app.ws.push(e.weight);
+        })
+        app.render_chart();
+    });
+
+  }
+})
+
+</script>
+
+
+<!-- css -->
+<style>
+
+table{
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+table tr{
+  border-bottom: solid 1px #eee;
+  cursor: pointer;
+}
+
+.chart_frame{
+  /* height:500px; */
+  /* width:600px;  */
+  width : 80%;
+  margin:50px auto;
+  border : solid 1px #aaa;
+}
+
+
+</style>
+
