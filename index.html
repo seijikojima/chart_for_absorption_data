@@ -30,18 +30,23 @@ var app = new Vue({
     ds : [],
     ts : [],
     hs : [],
-    ws : [],
+    w1s : [],
+    w2s : [],
+    w3s : [],
   },
   methods: {
 
     post_data : function(){
       var data = { 
-          "date" : new Date(),
-          "temperature" : 25.0+5-15,
-          "humidity" : 50.8+5-10,
-          "weight" : 32.0+10-20,
+          // "date" : new Date(),
+          // "temperature" : 25.0+5-15,
+          // "humidity" : 50.8+5-10,
+          "weight1" : 132.0+10-20,
+          // "weight2" : 43.0+10-20,
+          // "weight3" : 54.0+10-20,
+
           }
-      axios.post('http://139.162.125.21:7001/post_data', data ).then( res => {
+      axios.post('http://139.162.125.21:7001/data', data ).then( res => {
           console.log(data);
       });
 
@@ -67,9 +72,21 @@ var app = new Vue({
             backgroundColor: "rgba(0,0,0,0)"
           },
           {
-            label: '重さ',
-            data: app.ws,
+            label: '重さ1',
+            data: app.w1s,
             borderColor: "rgba(0,255,0,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          },
+          {
+            label: '重さ2',
+            data: app.w2s,
+            borderColor: "rgba(100,255,0,1)",
+            backgroundColor: "rgba(0,0,0,0)"
+          },
+          {
+            label: '重さ3',
+            data: app.w3s,
+            borderColor: "rgba(0,255,1000,1)",
             backgroundColor: "rgba(0,0,0,0)"
           }
         ],
@@ -105,7 +122,9 @@ var app = new Vue({
             app.ds.push(e.date);
             app.ts.push(e.temperature);
             app.hs.push(e.humidity);
-            app.ws.push(e.weight);
+            app.w1s.push(e.weight1);
+            app.w2s.push(e.weight2);
+            app.w3s.push(e.weight3);
         })
         app.render_chart();
     });
