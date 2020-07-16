@@ -1,6 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<meta http-equiv="content-type" charset="utf-8">
 
 <div id="app">
     <button v-on:click="post_data">post fake data</button>
@@ -9,12 +10,26 @@
       <canvas id="myLineChart"></canvas>
   </div>
     
-    <div v-for="item in items">
+    <div>
         <table>
-            <tr>
+
+          <tr>
+            <th>date</th>
+            <th>temperature</th>
+            <th>humitity</th>
+            <th>weight1</th>
+            <th>weight2</th>
+            <th>weight3</th>
+          </tr>
+
+            <tr v-for="item in items"> 
                 <td>{{item.date}}</td>
                 <td>{{item.temperature}}</td>
                 <td>{{item.humidity}}</td>
+                <td>{{item.weight1}}</td>
+                <td>{{item.weight2}}</td>
+                <td>{{item.weight3}}</td>
+                
             </tr>
         </table>
     </div>
@@ -39,11 +54,11 @@ var app = new Vue({
     post_data : function(){
       var data = { 
           // "date" : new Date(),
-          // "temperature" : 25.0+5-15,
-          // "humidity" : 50.8+5-10,
-          "weight1" : 132.0+10-20,
-          // "weight2" : 43.0+10-20,
-          // "weight3" : 54.0+10-20,
+          "temperature" : 25.0+5,
+          "humidity" : 80.8,
+          "weight1" : 120,
+          "weight2" : 10,
+          "weight3" : 20,
 
           }
       axios.post('http://139.162.125.21:7001/data', data ).then( res => {
@@ -147,6 +162,10 @@ table{
 table tr{
   border-bottom: solid 1px #eee;
   cursor: pointer;
+}
+
+td {
+  width : 300px;
 }
 
 .chart_frame{
